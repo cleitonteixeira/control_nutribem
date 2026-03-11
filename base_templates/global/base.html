@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    {% include "global/partials/head.html" %}
+    <title>{% block title %}{% endblock title %}Nutribem</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-secondary btn-sm float-start m-1 p-2 " type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-expanded="false" aria-controls="menu">
+                    <i class="fas fa-bars"></i> Menu
+                </button>
+                <h4 class="mb-2 p-2 border-bottom text-center">{% block page_title %}Nutribem{% endblock page_title %}</h4>
+            </div>
+            <div class="col-2 pr-0 m-negative">
+                <div class="collapse collapse-horizontal" id="menu">
+                    <div class="d-flex flex-column flex-shrink-0 p-1 bg-light" style="width: 180px; height: 100vh;">
+                        {% block sidebar %}{% endblock sidebar %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-10 pl-0">
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </div>
+    {% include "global/partials/footer.html" %}
+</body>
+
+</html>

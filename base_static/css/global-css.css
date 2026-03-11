@@ -1,0 +1,14 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+.row > .col-3 {
+    padding-right: 0;
+  }
+  
+.row > .col-9 {
+  padding-left: 0;
+}
+.m-negative {
+  margin-right: -2rem !important;
+}

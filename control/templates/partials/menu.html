@@ -1,0 +1,24 @@
+<main>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <a href="{% url 'control:index' %}" class="mb-2 link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+            Painel de Controle
+        </a>
+    </li>
+    <li class="list-group-item">
+        <a href="{% url 'control:equipamentos' %}" class="mb-2 link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+            Equipamentos
+        </a>
+    </li>
+    <li class="list-group-item">
+        <a href="{% url 'control:unidades' %}" class="mb-2 link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+            Unidades
+        </a>
+    </li>
+    <li class="list-group-item">
+        <a class="p-3 fw-bold accordion-button collapsed text-decoration-none disabled" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            Olá, {{ user.first_name }}!
+        </a>
+    </li>
+    </ul>
+</main>

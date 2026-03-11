@@ -1,0 +1,142 @@
+{% extends "pages/index_control.html" %}
+{% block sub_page_title %}Equipamentos<a href="{% url 'control:cadastrar_equipamento' %}" class="btn btn-outline-secondary btn-sm float-end" title="Adicionar Equipamento"><i class="fa fa-plus-square"></i></a>{% endblock sub_page_title %}
+{% block sub_content %}
+{% comment %} <div class="card shadow-sm mb-1">
+    <div class="card-body py-1"> 
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label for="unidade" class="form-label mb-1 fw-bold small">Unidade</label>
+                <select name="unidade" id="unidade" class="form-select form-select-sm">
+                    <option value="">Todas as Unidades</option>
+                    {% for u in unidades %}
+                        <option value="{{ u.id }}" {% if request.GET.unidade == u.id|stringformat:"s" %}selected{% endif %}>
+                            {{ u.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="tipo" class="form-label mb-1 fw-bold small">Tipo de Equipamento</label>
+                <select name="tipo" id="tipo" class="form-select form-select-sm">
+                    <option value="">Todos os Tipos</option>
+                    {% for t in tipos %}
+                        <option value="{{ t.id }}" {% if request.GET.tipo == t.id|stringformat:"s" %}selected{% endif %}>
+                            {{ t.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-search"></i> Filtrar
+                </button>
+            </div>
+            
+            <div class="col-md-2 d-grid">
+                <button type="submit" name="exportar" value="xlsx" class="btn btn-success btn-sm">
+                    <i class="fas fa-file-excel"></i> Exportar
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+ {% endcomment %}
+<table class="table table-hover align-middle table-sm">
+    <thead class="table-light">
+        <tr>
+            <th>Equipamento</th>
+            <th>Tipo</th>
+            <th>Unidade</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Ativo</th>
+            <th class="text-end px-4">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipamento in page_obj %}
+        <tr>
+            <td class="align-middle fw-bold">{{ equipamento.nome }}</td>
+            <td class="align-middle">{{ equipamento.tipo.nome }}</td>
+            <td class="align-middle">
+                <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ equipamento.unidade.nome }}</span>
+            </td>
+            <td class="align-middle text-center">
+                {% if equipamento.status == 'uso' %}
+                    <span class="badge bg-success">Em Uso</span>
+                {% elif equipamento.status == 'ocioso' %}
+                    <span class="badge bg-warning text-dark">Ocioso</span>
+                {% else %}
+                    <span class="badge bg-danger">Manutenção</span>
+                {% endif %}
+            </td>
+            <td class="align-middle text-center">
+                {% if equipamento.ativo %}
+                    <i class="fas fa-check-circle text-success"></i>
+                {% else %}
+                    <i class="fas fa-times-circle text-muted"></i>
+                {% endif %}
+            </td>
+            <td class="align-middle text-end px-4">
+                <a href="{% url 'control:editar_equipamento' equipamento.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center py-4 text-muted">
+                Nenhum equipamento encontrado com os filtros atuais.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    
+<div class="d-flex justify-content-between align-items-center mt-4 mb-5">
+    <div class="text-muted small">
+        Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} equipamentos
+    </div>
+
+    <nav aria-label="Navegação de páginas">
+        <ul class="pagination pagination-sm mb-0">
+            
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link shadow-none" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link shadow-none" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Anterior</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link"><i class="fas fa-angle-double-left"></i></span></li>
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link shadow-none" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Próxima</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link shadow-none" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+                <li class="page-item disabled"><span class="page-link"><i class="fas fa-angle-double-right"></i></span></li>
+            {% endif %}
+            
+        </ul>
+    </nav>
+</div>
+{% endblock sub_content %}

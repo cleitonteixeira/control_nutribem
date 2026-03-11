@@ -1,0 +1,81 @@
+{% extends "pages/index_control.html" %}
+{% block sub_page_title %}Editar | {{ equipamento.nome }}{% endblock sub_page_title %}
+{% block sub_content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-12 card p-4 shadow-sm">
+        <h3 class="mb-4 border-bottom pb-2">Editando: {{ equipamento.nome }}</h3>
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    {{ form.nome }}
+                    <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
+                    {% if form.nome.errors %}
+                        <div class="text-danger small mt-1">{{ form.nome.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-floating mb-3">
+                    {{ form.unidade }}
+                    <label for="{{ form.unidade.id_for_label }}">{{ form.unidade.label }}</label>
+                    {% if form.unidade.errors %}
+                        <div class="text-danger small mt-1">{{ form.unidade.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-floating mb-3">
+                    {{ form.tipo }}
+                    <label for="{{ form.tipo.id_for_label }}">{{ form.tipo.label }}</label>
+                    {% if form.tipo.errors %}
+                        <div class="text-danger small mt-1">{{ form.tipo.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-floating mb-3">
+                    {{ form.status }}
+                    <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                    {% if form.status.errors %}
+                        <div class="text-danger small mt-1">{{ form.status.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-floating mb-3">
+                    {{ form.valor }}
+                    <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                    {% if form.valor.errors %}
+                        <div class="text-danger small mt-1">{{ form.valor.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-floating mb-3">
+                    {{ form.responsavel }}
+                    <label for="{{ form.responsavel.id_for_label }}">{{ form.responsavel.label }}</label>
+                    {% if form.responsavel.errors %}
+                        <div class="text-danger small mt-1">{{ form.responsavel.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check mb-1">
+                    {{ form.ativo }}
+                    <label class="form-check-label fw-bold" for="{{ form.ativo.id_for_label }}">
+                        {{ form.ativo.label }}
+                    </label>
+                    {% if form.ativo.errors %}
+                        <div class="text-danger small">{{ form.ativo.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'control:equipamentos' %}" class="btn btn-outline-secondary me-md-2">Voltar</a>
+                <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
