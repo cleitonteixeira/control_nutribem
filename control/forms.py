@@ -1,5 +1,5 @@
 from django import forms
-from .models import Equipamento, Unidade
+from .models import ClasseEquipamento, Equipamento, Unidade
 from django.contrib.auth.models import User
 
 class UserFullNameChoiceField(forms.ModelChoiceField):
@@ -54,9 +54,15 @@ class EditUnidadeForm(forms.ModelForm):
 
 
 class EquipamentoForm(forms.ModelForm):
+    classe = forms.ModelChoiceField(
+        queryset=ClasseEquipamento.objects.all(),
+        label="Classe de Equipamento",
+        empty_label="Selecione uma Classe",
+        widget=forms.Select(attrs={'class': 'form-select', 'id': 'id_classe'})
+    )
     class Meta:
         model = Equipamento
-        fields = ['nome', 'unidade', 'tipo','valor','responsavel', 'status', 'ativo']
+        fields = ['nome', 'unidade', 'classe', 'tipo','valor','responsavel', 'status', 'ativo']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Liquidificador Industrial'}),
             'unidade': forms.Select(attrs={'class': 'form-select'}),
@@ -70,3 +76,8 @@ class EquipamentoForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
             'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Se estiver editando um equipamento, pré-seleciona a classe dele
+        if self.instance.pk and self.instance.tipo:
+            self.fields['classe'].initial = self.instance.tipo.classe

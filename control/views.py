@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash, logout, authenticate, login
 from django.core.paginator import Paginator
@@ -137,3 +137,8 @@ def editar_equipamento(request, pk):
     else:
         form = EquipamentoForm(instance=equipamento)
     return render(request, 'pages/equipamento_edit.html', {'form': form, 'equipamento': equipamento})
+
+def load_tipos(request):
+    classe_id = request.GET.get('classe_id')
+    tipos = TipoEquipamento.objects.filter(classe_id=classe_id).order_by('nome')
+    return JsonResponse(list(tipos.values('id', 'nome')), safe=False)

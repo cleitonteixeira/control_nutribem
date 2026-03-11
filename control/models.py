@@ -36,10 +36,21 @@ class Unidade(Base):
 
     def __str__(self):
         return f"{self.codigo} - {self.nome}"
+
+class ClasseEquipamento(Base):
+    nome = models.CharField("Classe de Equipamento", max_length=20)
+
+    class Meta:
+        verbose_name = "Classe de Equipamento"
+        verbose_name_plural = "Classes de Equipamento"
+        ordering = ['nome']
+
+    def __str__(self):
+        return self.nome
     
 class TipoEquipamento(Base):
     nome = models.CharField("Tipo de Equipamento", max_length=100)
-
+    classe = models.ForeignKey(ClasseEquipamento, on_delete=models.SET_DEFAULT, related_name='tipos', default=1)
     class Meta:
         verbose_name = "Tipo de Equipamento"
         verbose_name_plural = "Tipos de Equipamento"

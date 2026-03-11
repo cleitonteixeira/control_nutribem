@@ -19,10 +19,10 @@
                 </div>
                 <div class="col-4">
                     <div class="form-floating mb-3">
-                        {{ form.unidade }}
-                        <label for="{{ form.unidade.id_for_label }}">{{ form.unidade.label }}</label>
-                        {% if form.unidade.errors %}
-                            <div class="text-danger small mt-1">{{ form.unidade.errors }}</div>
+                        {{ form.classe }}
+                        <label for="{{ form.classe.id_for_label }}">{{ form.classe.label }}</label>
+                        {% if form.classe.errors %}
+                            <div class="text-danger small mt-1">{{ form.classe.errors }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -44,16 +44,32 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-floating mb-3">
-                        {{ form.valor }}
-                        <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                <div class="col-md-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-light text-muted fw-bold">R$</span>
+                        
+                        <div class="form-floating {% if form.valor.errors %}is-invalid{% endif %}">
+                            {{ form.valor }}
+                            <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                        </div>
+
                         {% if form.valor.errors %}
-                            <div class="text-danger small mt-1">{{ form.valor.errors }}</div>
+                            <div class="invalid-feedback d-block mt-1">
+                                {{ form.valor.errors|first }}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-3">
+                    <div class="form-floating mb-3">
+                        {{ form.unidade }}
+                        <label for="{{ form.unidade.id_for_label }}">{{ form.unidade.label }}</label>
+                        {% if form.unidade.errors %}
+                            <div class="text-danger small mt-1">{{ form.unidade.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-6">
                     <div class="form-floating mb-3">
                         {{ form.responsavel }}
                         <label for="{{ form.responsavel.id_for_label }}">{{ form.responsavel.label }}</label>
@@ -81,4 +97,20 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('id_classe').addEventListener('change', function() {
+        const classeId = this.value;
+        const url = "{% url 'control:ajax_load_tipos' %}";
+        const tipoSelect = document.getElementById('id_tipo');
+
+        fetch(`${url}?classe_id=${classeId}`)
+            .then(response => response.json())
+            .then(data => {
+                tipoSelect.innerHTML = '<option value="">Selecione o Tipo</option>';
+                data.forEach(item => {
+                    tipoSelect.innerHTML += `<option value="${item.id}">${item.nome}</option>`;
+                });
+            });
+    });
+</script>
 {% endblock %}
