@@ -82,6 +82,9 @@
                 {% endif %}
             </td>
             <td class="align-middle text-end px-4">
+                <a href="{% url 'control:transferir_equipamento' equipamento.pk %}" class="btn btn-sm btn-outline-primary" title="Transferir">
+                    <i class="fas fa-exchange-alt"></i>
+                </a>
                 <a href="{% url 'control:editar_equipamento' equipamento.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
                     <i class="fas fa-edit"></i>
                 </a>

@@ -1,0 +1,45 @@
+{% extends "pages/index_control.html" %}
+{% block sub_page_title %}Cadastrar Equipamento{% endblock sub_page_title %}
+{% block sub_content %}
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-md-12 card p-4 shadow-sm">
+            <h3 class="mb-4 border-bottom pb-2">Editando: {{ equipamento.nome }}</h3>
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-3">
+                    <div class="form-floating mb-3">
+                        {{ form.unidade }}
+                        <label for="{{ form.unidade.id_for_label }}">{{ form.unidade.label }}</label>
+                        {% if form.unidade.errors %}
+                            <div class="text-danger small mt-1">{{ form.unidade.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        {{ form.responsavel }}
+                        <label for="{{ form.responsavel.id_for_label }}">{{ form.responsavel.label }}</label>
+                        {% if form.responsavel.errors %}
+                            <div class="text-danger small mt-1">{{ form.responsavel.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        {{ form.motivo }}
+                        <label for="{{ form.motivo.id_for_label }}">{{ form.motivo.label }}</label>
+                        {% if form.motivo.errors %}
+                            <div class="text-danger small mt-1">{{ form.motivo.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Transferir Equipamento</button>
+                    <a href="{% url 'control:equipamentos' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

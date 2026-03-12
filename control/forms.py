@@ -80,3 +80,18 @@ class EquipamentoForm(forms.ModelForm):
         # Se estiver editando um equipamento, pré-seleciona a classe dele
         if self.instance.pk and self.instance.tipo:
             self.fields['classe'].initial = self.instance.tipo.classe
+        
+class TransferenciaEquipamentoForm(forms.ModelForm):
+    motivo = forms.CharField(
+        label="Motivo / Observação",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 100px', 'placeholder': 'Descreva o motivo da transferência'}),
+        required=True
+    )
+
+    class Meta:
+        model = Equipamento
+        fields = ['unidade', 'responsavel']
+        widgets = {
+            'unidade': forms.Select(attrs={'class': 'form-select'}),
+            'responsavel': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Responsável'}),
+        }

@@ -57,7 +57,7 @@ class TipoEquipamento(Base):
         ordering = ['classe', 'nome']
 
     def __str__(self):
-        return f"{self.classe.nome} - {self.nome}"  
+        return self.nome  
 
 class Equipamento(Base):
     STATUS_CHOICES = [
@@ -80,3 +80,21 @@ class Equipamento(Base):
 
     def __str__(self):
         return f"{self.nome} ({self.unidade.nome})"
+
+class HistoricoTransferencia(models.Model):
+    equipamento = models.ForeignKey(Equipamento, on_delete=models.CASCADE, related_name='historico_transferencias')
+    unidade_origem = models.ForeignKey('Unidade', on_delete=models.SET_NULL, null=True, related_name='transferencias_saida')
+    unidade_destino = models.ForeignKey('Unidade', on_delete=models.SET_NULL, null=True, related_name='transferencias_entrada')
+    responsavel_origem = models.CharField("Responsável Anterior", max_length=255, null=True, blank=True)
+    responsavel_destino = models.CharField("Novo Responsável", max_length=255, null=True, blank=True)
+    motivo = models.TextField("Motivo / Observação")
+    data_transferencia = models.DateTimeField(auto_now_add=True)
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # Quem logou no sistema
+
+    class Meta:
+        verbose_name = "Histórico de Transferência"
+        verbose_name_plural = "Históricos de Transferências"
+        ordering = ['-data_transferencia'] # Mostra os mais recentes primeiro
+
+    def __str__(self):
+        return f"{self.equipamento.nome} - {self.data_transferencia.strftime('%d/%m/%Y')}"

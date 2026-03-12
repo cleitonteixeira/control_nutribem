@@ -7,9 +7,9 @@ from django.core.paginator import Paginator
 
 import openpyxl
 
-from .forms import EquipamentoForm, UnidadeForm
+from .forms import EquipamentoForm, TransferenciaEquipamentoForm, UnidadeForm
 
-from .models import Equipamento, TipoEquipamento, Unidade
+from .models import Equipamento, HistoricoTransferencia, TipoEquipamento, Unidade
 
 def home(request):
     return render(request, 'pages/index_control.html')
@@ -137,9 +137,47 @@ def editar_equipamento(request, pk):
             return redirect('control:equipamentos')
     else:
         form = EquipamentoForm(instance=equipamento)
+        form.fields['unidade'].disabled = True
+        form.fields['responsavel'].disabled = True
     return render(request, 'pages/equipamento_edit.html', {'form': form, 'equipamento': equipamento})
+
+@login_required
+def transferir_equipamento(request, pk):
+    equipamento = get_object_or_404(Equipamento, pk=pk)
+    # Guarda os valores ANTIGOS antes de qualquer alteração
+    unidade_antiga = equipamento.unidade
+    responsavel_antigo = equipamento.responsavel
+
+    if request.method == 'POST':
+        form = TransferenciaEquipamentoForm(request.POST, instance=equipamento)
+        
+        if form.is_valid():
+            # Salva o equipamento com a nova unidade e responsável
+            equipamento_atualizado = form.save()
+            
+            # Pega o motivo digitado no form
+            motivo_texto = form.cleaned_data['motivo']
+            
+            # Cria o registro no Histórico!
+            HistoricoTransferencia.objects.create(
+                equipamento=equipamento_atualizado,
+                unidade_origem=unidade_antiga,
+                unidade_destino=equipamento_atualizado.unidade,
+                responsavel_origem=responsavel_antigo,
+                responsavel_destino=equipamento_atualizado.responsavel,
+                motivo=motivo_texto,
+                usuario=request.user # Registra o usuário logado
+            )
+            
+            messages.success(request, f'{equipamento.nome} transferido com sucesso!')
+            return redirect('control:equipamentos')
+    else:
+        form = TransferenciaEquipamentoForm(instance=equipamento)
+        
+    return render(request, 'pages/equipamento_transfer.html', {'form': form, 'equipamento': equipamento})
 
 def load_tipos(request):
     classe_id = request.GET.get('classe_id')
     tipos = TipoEquipamento.objects.filter(classe_id=classe_id).order_by('nome')
     return JsonResponse(list(tipos.values('id', 'nome')), safe=False)
+
