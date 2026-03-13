@@ -88,6 +88,9 @@
                 <a href="{% url 'control:editar_equipamento' equipamento.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
                     <i class="fas fa-edit"></i>
                 </a>
+                <a href="{% url 'control:detalhes_equipamento' equipamento.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                    <i class="fas fa-eye"></i>
+                </a>
             </td>
         </tr>
         {% empty %}

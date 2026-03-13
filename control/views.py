@@ -137,8 +137,6 @@ def editar_equipamento(request, pk):
             return redirect('control:equipamentos')
     else:
         form = EquipamentoForm(instance=equipamento)
-        form.fields['unidade'].disabled = True
-        form.fields['responsavel'].disabled = True
     return render(request, 'pages/equipamento_edit.html', {'form': form, 'equipamento': equipamento})
 
 @login_required
@@ -175,6 +173,11 @@ def transferir_equipamento(request, pk):
         form = TransferenciaEquipamentoForm(instance=equipamento)
         
     return render(request, 'pages/equipamento_transfer.html', {'form': form, 'equipamento': equipamento})
+
+def detalhes_equipamento(request, pk):
+    equipamento = get_object_or_404(Equipamento, pk=pk)
+    historico_transferencias = HistoricoTransferencia.objects.filter(equipamento=equipamento).select_related('unidade_origem', 'unidade_destino', 'usuario')
+    return render(request, 'pages/equipamento_detail.html', {'equipamento': equipamento, 'historico_transferencias': historico_transferencias})
 
 def load_tipos(request):
     classe_id = request.GET.get('classe_id')

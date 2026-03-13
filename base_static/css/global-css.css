@@ -12,3 +12,27 @@
 .m-negative {
   margin-right: -2rem !important;
 }
+
+* CSS para compactar a linha do tempo e colar o ponto na linha */
+.timeline-compact {
+    border-left: 2px solid #e9ecef;
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+}
+.timeline-item-compact {
+    position: relative;
+    margin-bottom: 1.25rem; /* Reduz o espaço entre as transferências */
+}
+.timeline-item-compact:last-child {
+    margin-bottom: 0;
+}
+.timeline-dot {
+    position: absolute;
+    left: -1.35rem; /* Ajusta a bolinha exatamente em cima da borda */
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #0d6efd; /* Cor azul do Bootstrap */
+    border: 2px solid #fff;
+}

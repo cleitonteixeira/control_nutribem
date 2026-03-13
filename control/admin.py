@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ClasseEquipamento, Unidade, TipoEquipamento, Equipamento
+from .models import ClasseEquipamento, HistoricoTransferencia, Unidade, TipoEquipamento, Equipamento
 
 @admin.register(Unidade)
 class UnidadeAdmin(admin.ModelAdmin):
@@ -15,4 +15,8 @@ class EquipamentoAdmin(admin.ModelAdmin):
 
 @admin.register(ClasseEquipamento)
 class ClasseEquipamentoAdmin(admin.ModelAdmin):
+    ...
+
+@admin.register(HistoricoTransferencia)
+class HistoricoTransferenciaAdmin(admin.ModelAdmin):
     ...

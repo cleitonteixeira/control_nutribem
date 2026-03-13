@@ -98,3 +98,9 @@ class HistoricoTransferencia(models.Model):
 
     def __str__(self):
         return f"{self.equipamento.nome} - {self.data_transferencia.strftime('%d/%m/%Y')}"
+    
+    @property
+    def nome_usuario(self):
+        if self.usuario:
+            return self.usuario.get_full_name() or self.usuario.username
+        return "Sistema/Removido"

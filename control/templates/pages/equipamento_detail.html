@@ -1,0 +1,97 @@
+{% extends "pages/index_control.html" %}
+{% block sub_page_title %}Equipamento{% endblock sub_page_title %}
+{% block sub_content %}
+<div class="row mt-4">
+    <div class="col-md-5">
+        <div class="card shadow-sm border-0 mb-4 h-100">
+            <div class="card-body">
+                <h4 class="fw-bold text-dark mb-1">{{ equipamento.nome }}</h4>
+                <span class="badge {% if equipamento.status == 'ocioso' %}bg-warning text-dark{% elif equipamento.status == 'uso' %}bg-success{% else %}bg-danger{% endif %} mb-4">
+                    {{ equipamento.get_status_display }}
+                </span>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block" style="font-size: 0.75rem; text-transform: uppercase;">Classe</small>
+                        <span class="fw-semibold"><i class="fas fa-tag text-secondary me-1"></i>{{ equipamento.tipo.classe.nome }}</span>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block" style="font-size: 0.75rem; text-transform: uppercase;">Tipo</small>
+                        <span class="fw-semibold"><i class="fas fa-boxes text-secondary me-1"></i>{{ equipamento.tipo.nome }}</span>
+                    </div>
+                    <div class="col-12 border-bottom pb-2">
+                        <small class="text-muted d-block" style="font-size: 0.75rem; text-transform: uppercase;">Valor</small>
+                        <span class="fw-semibold text-success"></i>R$ {{ equipamento.valor }}</span>
+                    </div>
+                    
+                    <div class="col-12 pt-1">
+                        <small class="text-muted d-block" style="font-size: 0.75rem; text-transform: uppercase;">Unidade Atual</small>
+                        <span class="fw-bold"><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ equipamento.unidade.nome }}</span>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <div class="bg-light rounded p-3">
+                            <small class="text-muted d-block border-bottom pb-1 mb-2 fw-bold" style="font-size: 0.75rem;">RESPONSABILIDADES</small>
+                            <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                <div><i class="fas fa-user-tie text-secondary me-2 w-15px"></i><strong>GU:</strong> {{ equipamento.unidade.gu.first_name }} {{ equipamento.unidade.gu.last_name }}</div>
+                                <div><i class="fas fa-user-shield text-secondary me-2 w-15px"></i><strong>Sup:</strong> {{ equipamento.unidade.supervisor.first_name }} {{ equipamento.unidade.supervisor.last_name }}</div>
+                                <div><i class="fas fa-user text-secondary me-2 w-15px"></i><strong>Resp:</strong> {{ equipamento.responsavel }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-history text-primary me-2"></i>Histórico de Movimentações</h5>
+            </div>
+            <div class="card-body pt-0">
+                
+                <div class="timeline-compact">
+                    {% for log in equipamento.historico_transferencias.all %}
+                    <div class="timeline-item-compact">
+                        <div class="timeline-dot"></div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small text-muted fw-semibold" style="font-size: 0.8rem;">
+                                <i class="far fa-calendar-alt me-1"></i>{{ log.data_transferencia|date:"d/m/Y H:i" }}
+                            </span>
+                            <small class="text-muted" style="font-size: 0.8rem;">
+                                <i class="fas fa-user-edit me-1"></i>{{ log.usuario.get_full_name|default:log.usuario.username }}
+                            </small>
+                        </div>
+                        
+                        <div class="bg-light border rounded p-2 mb-1 shadow-sm">
+                            <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size: 0.9rem;">
+                                <span class="text-secondary">{{ log.unidade_origem.nome|default:"Estoque" }}</span>
+                                <i class="fas fa-arrow-right text-primary"></i>
+                                <span class="fw-bold text-dark">{{ log.unidade_destino.nome }}</span>
+                            </div>
+                            {% if log.responsavel_destino %}
+                            <div class="text-muted mt-1" style="font-size: 0.8rem;">
+                                <i class="fas fa-user-check me-1"></i>{{ log.responsavel_destino }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="text-secondary fst-italic lh-sm ms-1" style="font-size: 0.85rem;">
+                            <i class="fas fa-quote-left text-light me-1"></i>{{ log.motivo }}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-box-open fs-3 mb-2 opacity-50"></i>
+                        <p class="mb-0">Este equipamento ainda não possui transferências.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock sub_content %}
