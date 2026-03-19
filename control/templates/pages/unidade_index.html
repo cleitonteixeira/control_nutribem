@@ -1,6 +1,7 @@
 {% extends "pages/index_control.html" %}
 {% block sub_page_title %}Unidades<a href="{% url 'control:cadastrar_unidade' %}" class="btn btn-outline-secondary btn-sm float-end" title="Adicionar Unidade"><i class="fa fa-plus-square"></i></a>{% endblock sub_page_title %}
 {% block sub_content %}
+{% load l10n %}
 <table class="table table-hover align-middle table-sm">
     <thead class="table-light">
         <tr>
@@ -15,7 +16,7 @@
     <tbody>
         {% for unidade in page_obj %}
         <tr>
-            <td><span class="badge bg-secondary">{{ unidade.codigo }}</span></td>
+            <td><span class="badge bg-secondary">{{ unidade.codigo|unlocalize }}</span></td>
             <td class="fw-bold">{{ unidade.nome }}</td>
             <td class="small">
                 {% if unidade.gu %}

@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash, logout, authenticate, login
 from django.core.paginator import Paginator
+from django.db.models import Count, Q
 
 import openpyxl
 
@@ -11,8 +12,19 @@ from .forms import EquipamentoForm, TransferenciaEquipamentoForm, UnidadeForm
 
 from .models import Equipamento, HistoricoTransferencia, TipoEquipamento, Unidade
 
+@login_required
 def home(request):
-    return render(request, 'pages/index_control.html')
+    status_counts = Equipamento.objects.aggregate(
+        total=Count('id'),
+        ociosos=Count('id', filter=Q(status='ocioso')),
+        em_uso=Count('id', filter=Q(status='uso')),
+        manutencao=Count('id', filter=Q(status='manutencao'))
+    )
+
+    context = {
+        'counts': status_counts,
+    }
+    return render(request, 'pages/index_control.html', context)
 
 @login_required
 def UnidadesView(request):

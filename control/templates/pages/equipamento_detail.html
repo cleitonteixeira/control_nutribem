@@ -1,6 +1,8 @@
 {% extends "pages/index_control.html" %}
 {% block sub_page_title %}Equipamento{% endblock sub_page_title %}
 {% block sub_content %}
+{% load l10n %}
+
 <div class="row mt-4">
     <div class="col-md-5">
         <div class="card shadow-sm border-0 mb-4 h-100">
@@ -21,7 +23,7 @@
                     </div>
                     <div class="col-12 border-bottom pb-2">
                         <small class="text-muted d-block" style="font-size: 0.75rem; text-transform: uppercase;">Valor</small>
-                        <span class="fw-semibold text-success"></i>R$ {{ equipamento.valor }}</span>
+                        <span class="fw-semibold text-success"></i>R$ {{ equipamento.valor|localize }}</span>
                     </div>
                     
                     <div class="col-12 pt-1">
@@ -58,7 +60,7 @@
                         
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="small text-muted fw-semibold" style="font-size: 0.8rem;">
-                                <i class="far fa-calendar-alt me-1"></i>{{ log.data_transferencia|date:"d/m/Y H:i" }}
+                                <i class="fa fa-calendar-alt me-1"></i>{{ log.data_transferencia|date:"d/m/Y H:i" }}
                             </span>
                             <small class="text-muted" style="font-size: 0.8rem;">
                                 <i class="fas fa-user-edit me-1"></i>{{ log.usuario.get_full_name|default:log.usuario.username }}
