@@ -84,25 +84,94 @@
 }
 
 /* 3. Estilização refinada para a Tabela do Bootstrap */
+.table {
+    --bs-table-bg: transparent; /* Remove o fundo padrão para usar o da div container */
+}
+
 .table thead th {
-    background-color: #f8fafc;
-    color: #64748b;
+    background-color: #f1f5f9 !important; /* Fundo sutil para o cabeçalho */
+    color: #475569;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.75rem; /* Fonte um pouco menor no cabeçalho */
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     border-bottom: 2px solid #e2e8f0 !important;
     border-top: none !important;
+    padding: 12px 16px; /* Mais respiro */
 }
 
 .table tbody td {
     color: #334155;
     vertical-align: middle;
     border-bottom: 1px solid #f1f5f9;
+    padding: 12px 16px; /* Mais respiro nas linhas */
+    font-size: 0.875rem; /* Fonte ligeiramente menor para os dados */
+}
+
+/* Efeito Hover mais suave */
+.table-hover tbody tr:hover {
+    background-color: #f8fafc !important;
+    transition: background-color 0.2s ease;
+}
+
+/* Container da Tabela com cantos arredondados e sombra */
+.table-responsive {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px; /* Cantos arredondados */
+    /* A sombra 'shadow-sm' já foi adicionada no HTML */
+}
+
+/* =========================================
+   BOTÕES E AÇÕES
+   ========================================= */
+
+/* Botões menores na tabela para não distorcer a altura da linha */
+.table .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border-radius: 6px;
+}
+
+/* Ajuste nos botões "Outline" para um visual mais limpo */
+.btn-outline-primary {
+    color: #3b82f6;
+    border-color: #bfdbfe;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+/* =========================================
+   PAGINAÇÃO (Para combinar com o novo visual)
+   ========================================= */
+
+.pagination .page-link {
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    margin: 0 2px;
+    border-radius: 6px !important; /* Arredonda cada botão separadamente */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #f8fafc;
+    color: #94a3b8;
 }
 body {
-    /* Um cinza azulado bem leve, padrão de sistemas modernos */
-    background-color: #f0f2f5 !important; 
+    background-color: #f8fafc !important; /* Um cinza ainda mais leve e frio */
     color: #334155;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* 2. Ajuste do Header (Painel Superior) */
