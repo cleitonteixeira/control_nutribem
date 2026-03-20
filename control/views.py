@@ -137,7 +137,15 @@ def cadastrar_equipamento(request):
     if request.method == 'POST':
         form = EquipamentoForm(request.POST)
         if form.is_valid():
-            form.save()
+            equipamento =form.save()
+            HistoricoTransferencia.objects.create(
+                equipamento=equipamento,
+                unidade_origem=None,
+                unidade_destino=equipamento.unidade,
+                responsavel_destino=equipamento.responsavel,
+                motivo="Cadastro Inicial do Equipamento no sistema.",
+                usuario=request.user
+            )
             messages.success(request, 'Equipamento cadastrado com sucesso!')
             return redirect('control:equipamentos')
     else:
