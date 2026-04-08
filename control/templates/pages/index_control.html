@@ -18,13 +18,10 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Seleciona todos os alertas dentro do container de mensagens
     const alerts = document.querySelectorAll('.message-container .alert');
 
     alerts.forEach(function(alert) {
-        // Define o tempo de exibição (5000ms = 5 segundos)
         setTimeout(function() {
-            // Usa a API do Bootstrap para fechar o alerta com a animação de fade
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         }, 5000);
