@@ -39,7 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'control_nutribem.urls'
+ROOT_URLCONF = 'gestek.urls'
 
 TEMPLATES = [
     {
@@ -59,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'control_nutribem.wsgi.application'
+WSGI_APPLICATION = 'gestek.wsgi.application'
 
 
 # Database
