@@ -188,7 +188,7 @@ def transferir_equipamento(request, pk):
                 motivo=motivo_texto,
                 usuario=request.user
             )
-            messages.success(request, f'{equipamento.nome} transferido com sucesso!')
+            messages.success(request, f'{equipamento.nome} transferido para {equipamento_atualizado.unidade} com sucesso!')
             return redirect('control:detalhes_equipamento', pk=equipamento.pk)
     else:
         form = TransferenciaEquipamentoForm(instance=equipamento)
