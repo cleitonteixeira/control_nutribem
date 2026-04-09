@@ -38,7 +38,8 @@ class Unidade(Base):
         return f"{self.codigo} - {self.nome}"
 
 class ClasseEquipamento(Base):
-    nome = models.CharField("Classe de Equipamento", max_length=20)
+    nome = models.CharField("Classe de Equipamento", max_length=20, unique=True)
+    sigla = models.CharField("Sigla", max_length=3, unique=True, blank=True, null=True)
 
     class Meta:
         verbose_name = "Classe de Equipamento"
@@ -72,6 +73,31 @@ class Equipamento(Base):
     valor = models.DecimalField("Valor do Equipamento", max_digits=10, decimal_places=2, null=True, blank=True, default=0.00)
     responsavel = models.TextField("Responsável", max_length=255, null=True, blank=True, default="Dpto/Unidade")
     ativo = models.BooleanField(default=True)
+    tag = models.CharField("Tag Patrimonial", max_length=20, unique=True, editable=False, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.tag:
+            # 1. Obtém o prefixo da Classe (ex: TIC, MOB, MAQ)
+            # Idealmente, adicione um campo 'sigla' no model ClasseEquipamento
+            prefixo = self.tipo.classe.sigla or self.tipo.classe.nome[:3].upper()
+
+            # 2. Busca o último número sequencial para este prefixo
+            ultimo_equipamento = Equipamento.objects.filter(tag__startswith=prefixo).order_by('tag').last()
+            
+            if ultimo_equipamento and ultimo_equipamento.tag:
+                # Extrai o número da tag atual (ex: 'TIC-0005' -> 5)
+                try:
+                    ultimo_numero = int(ultimo_equipamento.tag.split('-')[-1])
+                    novo_numero = ultimo_numero + 1
+                except (ValueError, IndexError):
+                    novo_numero = 1
+            else:
+                novo_numero = 1
+
+            # 3. Formata a nova TAG (ex: TIC-0001)
+            self.tag = f"{prefixo}-{novo_numero:04d}"
+            
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Equipamento"
