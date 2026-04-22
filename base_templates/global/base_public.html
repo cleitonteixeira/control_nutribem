@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    {% include "global/partials/head.html" %}
+    <title>{% block title %}{% endblock title %}Gestek</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-12 pl-0">
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </div>
+    {% include "global/partials/footer.html" %}
+</body>
+
+</html>

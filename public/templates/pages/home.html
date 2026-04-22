@@ -1,0 +1,125 @@
+{% extends "global/base_public.html" %}
+{% load l10n %}
+{% block title %}Control | {% endblock title %}
+{% block page_title %}
+    {% block sub_page_title %}Painel de Controle{% endblock sub_page_title %}
+{% endblock page_title %}
+{% block content %}
+<div class="container py-1">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h2 class="text-center mb-4"><i class="bi bi-search me-2"></i>Consulta de Patrimônio</h2>
+            
+            <form method="GET" action="{% url 'public:index' %}" class="input-group input-group-lg mb-4 shadow-sm">
+                <input type="text" name="tag" class="form-control border-0" placeholder="Digite a TAG (Ex: TIC-0001)" value="{{ query }}" autofocus>
+                <button class="btn btn-primary px-4" type="submit">Buscar</button>
+            </form>
+            {% if erro %}
+                <div class="alert alert-warning shadow-sm" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> {{ erro }}
+                </div>
+            {% endif %}
+
+            {% if equipamento %}
+            <div class="card border-0 shadow-lg animate__animated animate__fadeIn">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">PRONTUÁRIO DO EQUIPAMENTO</span>
+                    <span class="badge bg-warning text-dark font-monospace">{{ equipamento.tag }}</span>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-4" id="abaEquipamento" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">Geral</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="mov-tab" data-bs-toggle="tab" data-bs-target="#mov" type="button">Movimentações ({{ movimentacoes.count }})</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="manut-tab" data-bs-toggle="tab" data-bs-target="#manut" type="button">Manutenções ({{ manutencoes.count }})</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="conteudoAba">
+                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h3 class="text-primary">{{ equipamento.nome }}</h3>
+                                    <p class="text-muted">{{ equipamento.tipo.nome }} | {{ equipamento.tipo.classe.nome }}</p>
+                                    <hr>
+                                    <p><strong>Responsável Atual:</strong> {{ equipamento.responsavel }}</p>
+                                    <p><strong>Unidade Atual:</strong> {{ equipamento.unidade.nome }}</p>
+                                    <p><strong>Valor Estimado:</strong> R$ {{ equipamento.valor }}</p>
+                                </div>
+                                <div class="col-md-4 text-center border-start">
+                                    <small class="text-muted d-block">Status</small>
+                                    <span class="badge {% if equipamento.status == 'uso' %}bg-success{% elif equipamento.status == 'manutencao' %}bg-danger{% else %}bg-secondary{% endif %} fs-5 mb-3">
+                                        {{ equipamento.get_status_display }}
+                                    </span>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="mov" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Origem</th>
+                                            <th>Destino</th>
+                                            <th>Responsável</th>
+                                            <th>Motivo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mov in movimentacoes %}
+                                        <tr>
+                                            <td>{{ mov.data_transferencia|date:"d/m/Y H:i" }}</td>
+                                            <td><span class="text-muted">{{ mov.unidade_origem|default:"Cadastro Inicial" }}</span></td>
+                                            <td><strong>{{ mov.unidade_destino }}</strong></td>
+                                            <td>{{ mov.responsavel_destino }}</td>
+                                            <td><small>{{ mov.motivo }}</small></td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr><td colspan="5" class="text-center">Nenhuma movimentação registrada.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="manut" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Descrição</th>
+                                            <th>Custo</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for man in manutencoes %}
+                                        <tr>
+                                            <td>{{ man.data_manutencao|date:"d/m/Y" }}</td>
+                                            <td>{{ man.descricao }}</td>
+                                            <td>R$ {{ man.valor }}</td>
+                                            <td><span class="badge bg-info text-dark">{{ man.get_status_display }}</span></td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr><td colspan="4" class="text-center">Nenhuma manutenção registrada.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
